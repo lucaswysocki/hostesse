@@ -1,0 +1,413 @@
+/* General Styles */
+:root {
+    --font-primary: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+    min-height: 100vh;
+    font-family: var(--font-primary);
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+}
+
+.logo {
+    font-size: 48px;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.logo-host {
+    color: #313131;
+}
+
+.logo-esse {
+    color: cyan;
+}
+
+/* Navbar Logo Styles */
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0;
+    letter-spacing: -0.5px;
+    padding: 0;
+}
+
+.navbar .logo-host {
+    color: #ffffff;
+}
+
+.navbar .logo-esse {
+    color: #00ffff;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    font-family: var(--font-primary);
+}
+
+.host-form {
+    margin-bottom: 1.5rem;
+}
+
+.host-form input {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,0.2);
+    color: #212529;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    font-family: var(--font-primary);
+}
+
+.host-form input::placeholder {
+    color: #6c757d;
+}
+
+.host-form button {
+    background-color: #00ffff;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    font-family: var(--font-primary);
+}
+
+.host-form button:hover {
+    background-color: #00e6e6;
+}
+
+/* Host List Styles */
+.host-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-primary);
+}
+
+.host-item {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-family: var(--font-primary);
+}
+
+.host-item:hover {
+    background-color: #f8f9fa;
+}
+
+.host-item.selected {
+    background-color: #f8f9fa;
+    border: 1px solid #00ffff;
+}
+
+.host-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-primary);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-online {
+    background-color: #00ffff;
+}
+
+.status-offline {
+    background-color: #888888;
+}
+
+.host-actions {
+    display: flex;
+    gap: 0.5rem;
+    font-family: var(--font-primary);
+}
+
+.btn-remove {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: var(--font-primary);
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+/* Main Content Area */
+.main-content {
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    font-family: var(--font-primary);
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-bottom: 2rem;
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: var(--font-primary);
+}
+
+/* Status Details */
+.status-details {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    font-family: var(--font-primary);
+}
+
+.status-details h3 {
+    color: #212529;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-family: var(--font-primary);
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    font-family: var(--font-primary);
+}
+
+.status-label {
+    color: #6c757d;
+    font-family: var(--font-primary);
+}
+
+.status-value {
+    color: #495057;
+    font-family: var(--font-primary);
+}
+
+.status-value.status-online {
+    color: #00ffff;
+}
+
+.status-value.status-offline {
+    color: #888888;
+}
+
+/* Status Labels */
+.status-labels {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
+    font-family: var(--font-primary);
+}
+
+.status-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #495057;
+    font-family: var(--font-primary);
+}
+
+/* Login Page Styles */
+.login-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e2024 0%, #17181c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-primary);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    font-family: var(--font-primary);
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-primary);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-family: var(--font-primary);
+}
+
+.login-header .logo {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-primary);
+}
+
+.login-header p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+}
+
+.login-form .input-group {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    font-family: var(--font-primary);
+}
+
+.login-form .input-group:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.login-form .input-group-focus {
+    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.25);
+}
+
+.login-form .input-group-text {
+    background: transparent;
+    border: none;
+    color: #00ffff;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-primary);
+}
+
+.login-form .form-control {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-primary);
+}
+
+.login-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.login-form .form-control:focus {
+    box-shadow: none;
+    background: transparent;
+}
+
+.login-form .btn-outline-secondary {
+    border: none;
+    color: #00ffff;
+    background: transparent;
+    font-family: var(--font-primary);
+}
+
+.login-form .btn-outline-secondary:hover {
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+}
+
+.login-form .btn-primary {
+    background: #00ffff;
+    border: none;
+    color: #000;
+    padding: 0.75rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: var(--font-primary);
+}
+
+.login-form .btn-primary:hover {
+    background: #00e6e6;
+    transform: translateY(-1px);
+}
+
+.login-form .btn-primary:active {
+    transform: translateY(0);
+}
+
+.alert {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    backdrop-filter: blur(10px);
+    margin-bottom: 1.5rem;
+    font-family: var(--font-primary);
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    color: #ff6b6b;
+    font-family: var(--font-primary);
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    color: #51cf66;
+    font-family: var(--font-primary);
+}
+
+/* Override logo color specifically for login page */
+.login-page .logo-host {
+    color: #ffffff;
+    font-family: var(--font-primary);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+        margin-bottom: 1rem;
+        font-family: var(--font-primary);
+    }
+    
+    .main-content {
+        height: auto;
+        font-family: var(--font-primary);
+    }
+    
+    .chart-container {
+        height: 250px;
+        margin-top: 1rem;
+        font-family: var(--font-primary);
+    }
+}
