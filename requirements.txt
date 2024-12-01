@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 Flask-Login
 ping3
 APScheduler
+Flask-Migrate

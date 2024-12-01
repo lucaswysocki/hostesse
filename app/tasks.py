@@ -1,10 +1,12 @@
 from datetime import datetime
 from ping3 import ping
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.memory import MemoryJobStore
 import logging
 from app import db
 from app.models import Host, HostStatusEvent
 from sqlalchemy import func
+import pytz
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -17,6 +19,7 @@ class HostChecker:
     def cleanup_old_events(self, host_id, max_events=1000):
         """Delete oldest events when count exceeds max_events"""
         try:
+            utc = pytz.UTC
             count = HostStatusEvent.query.filter_by(host_id=host_id).count()
             if count > max_events:
                 # Find the timestamp of the max_events-th most recent event
@@ -25,9 +28,10 @@ class HostChecker:
                     .offset(max_events).first()
                 
                 if cutoff_event:
+                    cutoff_time = cutoff_event.timestamp if cutoff_event.timestamp.tzinfo else utc.localize(cutoff_event.timestamp)
                     # Delete all events older than the cutoff
                     HostStatusEvent.query.filter_by(host_id=host_id)\
-                        .filter(HostStatusEvent.timestamp < cutoff_event.timestamp)\
+                        .filter(HostStatusEvent.timestamp < cutoff_time)\
                         .delete()
                     db.session.commit()
                     logger.info(f"Cleaned up old events for host {host_id}")
@@ -60,18 +64,37 @@ class HostChecker:
             except Exception as e:
                 logger.error(f"Error in check_all_hosts: {str(e)}")
 
+_scheduler = None
+
 def init_scheduler(app):
-    scheduler = BackgroundScheduler()
+    global _scheduler
+    
+    # If scheduler already exists, return it
+    if _scheduler is not None:
+        return _scheduler
+    
+    # Create new scheduler with memory jobstore
+    _scheduler = BackgroundScheduler(
+        jobstores={'default': MemoryJobStore()},
+        timezone=pytz.timezone('Europe/Warsaw')  # Using Europe/Warsaw instead of UTC
+    )
+    
     host_checker = HostChecker(app)
     
-    scheduler.add_job(
+    # Remove any existing jobs with the same ID
+    _scheduler.remove_all_jobs()
+    
+    _scheduler.add_job(
         id='check_hosts',
         func=host_checker.check_all_hosts,
         trigger='interval',
         seconds=30,  # Check every 30 seconds
-        replace_existing=True
+        replace_existing=True,
+        max_instances=1  # Ensure only one instance runs at a time
     )
     
-    scheduler.start()
-    logger.info("Scheduler started successfully")
-    return scheduler
+    if not _scheduler.running:
+        _scheduler.start()
+        logger.info("Scheduler started successfully")
+    
+    return _scheduler

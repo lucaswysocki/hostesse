@@ -102,3 +102,29 @@ def logout():
 def host_stats(host_id):
     host = Host.query.get_or_404(host_id)
     return jsonify(host.get_status_statistics())
+
+# Notification routes
+@auth_bp.route('/api/notifications')
+@login_required
+def get_notifications():
+    unread_notifications = StatusSwitch.query.filter_by(is_read=False)\
+        .order_by(StatusSwitch.timestamp.desc())\
+        .limit(20)\
+        .all()
+    return jsonify([notification.to_dict() for notification in unread_notifications])
+
+@auth_bp.route('/api/notifications/mark-read', methods=['POST'])
+@login_required
+def mark_notifications_read():
+    notification_ids = request.json.get('notification_ids', [])
+    if notification_ids:
+        StatusSwitch.query.filter(StatusSwitch.id.in_(notification_ids))\
+            .update({StatusSwitch.is_read: True}, synchronize_session=False)
+        db.session.commit()
+    return jsonify({'status': 'success'})
+
+@auth_bp.route('/api/notifications/count')
+@login_required
+def get_notification_count():
+    count = StatusSwitch.query.filter_by(is_read=False).count()
+    return jsonify({'count': count})
