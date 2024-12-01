@@ -1,4 +1,4 @@
-# <div style="background-color: black; display: inline-block; padding: 5px;"><span style="color: white">host</span><span style="color: cyan">esse</span></div>
+# hostesse
 
 Hostesse is a lightweight application for monitoring host status across your network. It provides real-time monitoring of multiple hosts, with features including:
 
