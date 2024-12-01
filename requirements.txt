@@ -5,3 +5,4 @@ ping3
 APScheduler
 Flask-Migrate
 Flask-Mail
+python-dotenv

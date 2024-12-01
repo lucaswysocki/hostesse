@@ -39,8 +39,17 @@ def index():
 def add_host():
     hostname = request.form.get('hostname')
     ip_address = request.form.get('ip_address')
+    notification_emails = request.form.get('notification_emails')
+    email_notifications_enabled = request.form.get('email_notifications_enabled') == 'on'
+    
     if ip_address:
-        new_host = Host(hostname=hostname, ip_address=ip_address, status='offline')
+        new_host = Host(
+            hostname=hostname,
+            ip_address=ip_address,
+            status='offline',
+            notification_emails=notification_emails,
+            email_notifications_enabled=email_notifications_enabled
+        )
         db.session.add(new_host)
         db.session.commit()
         flash('Host added successfully!', 'success')

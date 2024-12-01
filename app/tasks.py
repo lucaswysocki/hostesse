@@ -44,22 +44,31 @@ class HostChecker:
             response_time = ping(host.ip_address, timeout=2)
             new_status = 'online' if response_time is not None else 'offline'
             
-            # Check if status has changed
+            # Check if status has changed and update the database
             if new_status != host.status:
+                logger.info(f"Host {host.hostname} status changed from {host.status} to {new_status}")
+                
+                # Update host status in database first
+                host.status = new_status
+                db.session.commit()
+                
+                # Create status event
+                event = HostStatusEvent(host_id=host.id, status=new_status)
+                db.session.add(event)
+                db.session.commit()
+                
                 # Send email notification if enabled
                 if host.email_notifications_enabled:
                     EmailSender.send_status_notification(host, new_status)
-            
-            # Update status and let update_status handle event creation
-            if host.update_status(new_status):
-                # Cleanup old events if necessary
+                
+                # Cleanup old events
                 self.cleanup_old_events(host.id)
             
             logger.info(f"Host {host.ip_address} status recorded as {new_status}")
             return new_status
             
         except Exception as e:
-            logger.error(f"Error checking host {host.ip_address}: {str(e)}")
+            logger.error(f"Error checking host {host.hostname} status: {str(e)}")
             return 'unknown'
 
     def check_all_hosts(self):
@@ -76,14 +85,20 @@ _scheduler = None
 def init_scheduler(app):
     global _scheduler
     
-    # If scheduler already exists, return it
-    if _scheduler is not None:
+    # If scheduler already exists and is running, return it
+    if _scheduler is not None and _scheduler.running:
+        logger.info("Using existing scheduler")
         return _scheduler
+    
+    # If there's an existing scheduler that's not running, shut it down
+    if _scheduler is not None:
+        logger.info("Shutting down existing scheduler")
+        _scheduler.shutdown()
     
     # Create new scheduler with memory jobstore
     _scheduler = BackgroundScheduler(
         jobstores={'default': MemoryJobStore()},
-        timezone=pytz.timezone('Europe/Warsaw')  # Using Europe/Warsaw instead of UTC
+        timezone=pytz.timezone('Europe/Warsaw')
     )
     
     host_checker = HostChecker(app)
@@ -97,7 +112,8 @@ def init_scheduler(app):
         trigger='interval',
         seconds=30,  # Check every 30 seconds
         replace_existing=True,
-        max_instances=1  # Ensure only one instance runs at a time
+        max_instances=1,  # Ensure only one instance runs at a time
+        coalesce=True    # Combine multiple executions of the same job into one
     )
     
     if not _scheduler.running:
