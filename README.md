@@ -1,4 +1,4 @@
-# Hostesse
+# <div style="background-color: black; display: inline-block; padding: 5px;"><span style="color: white">host</span><span style="color: cyan">esse</span></div>
 
 Hostesse is a lightweight application for monitoring host status across your network. It provides real-time monitoring of multiple hosts, with features including:
 
@@ -10,8 +10,14 @@ Hostesse is a lightweight application for monitoring host status across your net
 
 ## Requirements
 
-- Python 3.6 or higher
-- pip (Python package installer)
+- Flask
+- Flask-SQLAlchemy
+- Flask-Login
+- ping3
+- APScheduler
+- Flask-Migrate
+- Flask-Mail
+- python-dotenv
 
 ## Installation
 
@@ -72,7 +78,7 @@ python run.py
    - Enter hostname/IP address
    - Optionally enable email notifications
 3. Monitor host status:
-   - Green status indicates online
+   - Cyan status indicates online
    - Gray status indicates offline
    - View uptime statistics and charts
    - Receive notifications for status changes
