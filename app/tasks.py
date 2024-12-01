@@ -7,6 +7,7 @@ from app import db
 from app.models import Host, HostStatusEvent
 from sqlalchemy import func
 import pytz
+from app.utils.email_sender import EmailSender
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +43,12 @@ class HostChecker:
         try:
             response_time = ping(host.ip_address, timeout=2)
             new_status = 'online' if response_time is not None else 'offline'
+            
+            # Check if status has changed
+            if new_status != host.status:
+                # Send email notification if enabled
+                if host.email_notifications_enabled:
+                    EmailSender.send_status_notification(host, new_status)
             
             # Update status and let update_status handle event creation
             if host.update_status(new_status):

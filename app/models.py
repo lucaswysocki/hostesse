@@ -18,6 +18,8 @@ class Host(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
     status_events = db.relationship('HostStatusEvent', backref='host', lazy=True)
     status_switches = db.relationship('StatusSwitch', backref='host', lazy=True)
+    notification_emails = db.Column(db.String(500), nullable=True)
+    email_notifications_enabled = db.Column(db.Boolean, default=False)
 
     def get_status_statistics(self):
         utc = pytz.UTC
